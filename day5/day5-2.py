@@ -4,34 +4,68 @@ data = list(map(int, f.read().split(",")))
 
 def main():
     toSkip = False
-    for x in range(0, len(data), 2):
-        if toSkip:
-            toSkip = False
-            continue
-
+    x = 0
+    while x < len(data):
         opcode = getCode(data[x])
-        if opcode[3] == 1 or opcode[3] == 2:
-            if opcode[2]:
-                val1 = data[x + 1]
-            else:
-                val1 = data[data[x + 1]]
-            if opcode[1]:
-                val2 = data[x + 2]
-            else:
-                val2 = data[data[x + 2]]
+        val1 = getVal(opcode, x, 1)
+        val2 = getVal(opcode, x, 2)
+        val3 = getVal(opcode, x, 3)
 
         if opcode[3] == 1:
-            data[data[x+3]] = val1 + val2
-            toSkip = True
+            data[val3] = val1 + val2
+            x = x + 4
         elif opcode[3] == 2:
-            data[data[x+3]] = val1 * val2
-            toSkip = True
+            data[val3] = val1 * val2
+            x = x + 4
         elif opcode[3] == 3:
             data[data[x+1]] = int(input("Enter a value: "))
+            x = x + 2
         elif opcode[3] == 4:
-            print(data[data[x+1]])
+            print(val1)
+            x = x + 2
+        elif opcode[3] == 5:
+            if val1 != 0:
+                x = val2
+            else:
+                x = x + 3
+        elif opcode[3] == 6:
+            if val1 == 0:
+                x = val2
+            else:
+                x = x + 3
+        elif opcode[3] == 7:
+            if val1 < val2:
+                data[val3] = 1
+            else:
+                data[val3] = 0
+            x = x + 4
+        elif opcode[3] == 8:
+            if val1 == val2:
+                data[val3] = 1
+            else:
+                data[val3] = 0
+            x = x + 4
         elif opcode[3] == 99:
             exit()
+
+
+def getVal(opcode, x, val):
+    try:
+        if val == 1:
+            if opcode[2] == 0:
+                return data[data[x + 1]]
+            else:
+                return data[x + 1]
+        elif val == 2:
+            if opcode[1] == 0:
+                return data[data[x + 2]]
+            else:
+                return data[x + 2]
+        elif val == 3:
+            return data[x + 3]
+
+    except:
+        return
 
 
 def getCode(opcode):
