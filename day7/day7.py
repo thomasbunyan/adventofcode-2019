@@ -1,19 +1,16 @@
+from itertools import chain, permutations
 
 
 def main():
-    highest = 0
-    phase = None
-    for A in range(0, 5):
-        for B in range(0, 5):
-            for C in range(0, 5):
-                for D in range(0, 5):
-                    for E in range(0, 5):
-                        phaseSetting = (A, B, C, D, E)
-                        res = amp(phaseSetting)
-                        if res > highest and len(phaseSetting) == len(set(phaseSetting)):
-                            highest = res
-                            phase = (A, B, C, D, E)
-    return ((highest, phase))
+    maxSignal = 0
+    phaseSetting = None
+    for phase in permutations([0, 1, 2, 3, 4]):
+        res = amp(phase)
+        if res > maxSignal:
+            highest = res
+            phaseSetting = phase
+
+    return ((maxSignal, phaseSetting))
 
 
 def amp(phaseSetting):
