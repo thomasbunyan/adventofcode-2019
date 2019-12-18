@@ -15,13 +15,11 @@ def addOrbits():
 
 
 def getLength(o, counter):
+    innerCounter = 0
     if o in orbits.keys():
-        innerCounter = 0
         for x in orbits[o]:
             innerCounter = innerCounter + getLength(x, counter + 1)
-        return counter + innerCounter
-    else:
-        return counter
+    return counter + innerCounter
 
 
 addOrbits()
