@@ -2,6 +2,7 @@ f = open("./input.txt", "r")
 data = f.read().split("\n")
 
 orbits = dict()
+distance = dict()
 
 
 def addOrbits():
@@ -12,17 +13,20 @@ def addOrbits():
             orbits[left].append(right)
         else:
             orbits[left] = [right]
+        if right in orbits.keys():
+            orbits[right].append(left)
+        else:
+            orbits[right] = [left]
 
 
-def getLength(o, counter):
-    if o in orbits.keys():
-        innerCounter = 0
-        for x in orbits[o]:
-            innerCounter = innerCounter + getLength(x, counter + 1)
-        return counter + innerCounter
-    else:
-        return counter
+def dijkstra(o, dis):
+    if len(distance) >= len(orbits) or o in distance.keys():
+        return
+    distance[o] = dis
+    for x in orbits[o]:
+        dijkstra(x, dis + 1)
 
 
 addOrbits()
-print(getLength("COM", 0))
+dijkstra("YOU", 0)
+print(distance["SAN"] - 2)
